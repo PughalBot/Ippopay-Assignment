@@ -1,30 +1,66 @@
-function minimumAbsDifference(nums) {
-    const n = nums.length / 2;
-    const totalSum = nums.reduce((sum, num) => sum + num, 0);
+function lowerBound(nums, key){
+    let left =0;
+    let right = nums.length-1;
+    let ans=nums.length-1;
+    while (left <= right) {
+            let mid = left + (right - left) / 2;
+            let midValue = nums[mid];
 
-    const dp = Array.from({ length: n + 1 }, () => Array(totalSum * 2 + 1).fill(false));
-    dp[0][totalSum] = true;
-
-    for (let i = 0; i < nums.length; i++) {
-        for (let j = n; j >= 1; j--) {
-            for (let k = 2 * totalSum; k >= nums[i]; k--) {
-                dp[j][k] = dp[j][k] || dp[j - 1][k - nums[i]];
+            if (midValue >= key) {
+               ans=mid;
+               right=mid-1;
+            } else {
+               left=mid+1;
             }
-        }
     }
+    return nums[ans];
+}
+function minimumDifference(nums){
+    var one = {};
+    var two = {};
 
-    let minDiff = Infinity;
-    for (let k = totalSum; k <= 2 * totalSum; k++) {
-        if (dp[n][k]) {
-            minDiff = Math.min(minDiff, Math.abs(totalSum - k));
+        let n=nums.length/2;
+        let sum = nums.reduce((acc, num) => acc + num, 0);
+
+        for(let i=0;i<(1<<n);i++){
+            let s1=0;
+            let s2=0;
+            let l1=0;
+            let l2=0;
+            for(let j=0;j<n;j++){
+                if((i&(1<<j))>=1){
+                s1+=nums[j];
+                s2+=nums[j+n];
+                l1++;
+                l2++;
+                }
+            }
+            let fi = [];
+            let se = [];
+           fi.push(s1);
+           se.push(s2);
+           one[l1]=fi;
+           two[l2]=se;
+         
         }
-    }
-
-    return minDiff;
+        for(var e in two){
+            arr = two[e];
+            arr.sort();
+            two[e]=arr;
+        }
+     let ans=Infinity;
+        for(var e in one){
+             let nfi=one[e];
+             let nse=two[n-e];
+             for(var m in nfi){
+                 let lb=lowerBound(nse,(sum-2*m)/2);
+                 ans=Math.min(ans,sum-2*(m+lb));
+             }
+        }
+        if(isNaN(ans))
+        return 0;
+        else
+        return Math.abs(ans);
 }
 
-function minimizeDifference(nums) {
-    return minimumAbsDifference(nums);
-}
-
-module.exports = minimizeDifference;
+module.exports = minimumDifference;
