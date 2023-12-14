@@ -1,23 +1,30 @@
-function minimizeDifference(nums) {
+function minimumAbsDifference(nums) {
     const n = nums.length / 2;
-    let sum = nums.reduce((a, b) => a + b, 0);
-    let halfSum = sum / 2;
-    let dp = Array.from({ length: n + 1 }, () => new Array(Math.floor(halfSum) + 1).fill(false));
-    dp[0][0] = true;
+    const totalSum = nums.reduce((sum, num) => sum + num, 0);
 
-    for (let num of nums) {
-        for (let i = n; i > 0; i--) {
-            for (let j = halfSum; j >= num; j--) {
-                dp[i][j] = dp[i][j] || dp[i - 1][j - num];
+    const dp = Array.from({ length: n + 1 }, () => Array(totalSum * 2 + 1).fill(false));
+    dp[0][totalSum] = true;
+
+    for (let i = 0; i < nums.length; i++) {
+        for (let j = n; j >= 1; j--) {
+            for (let k = 2 * totalSum; k >= nums[i]; k--) {
+                dp[j][k] = dp[j][k] || dp[j - 1][k - nums[i]];
             }
         }
     }
 
-    for (let j = halfSum; j >= 0; j--) {
-        if (dp[n][j]) {
-            return Math.abs(sum - 2 * j);
+    let minDiff = Infinity;
+    for (let k = totalSum; k <= 2 * totalSum; k++) {
+        if (dp[n][k]) {
+            minDiff = Math.min(minDiff, Math.abs(totalSum - k));
         }
     }
+
+    return minDiff;
+}
+
+function minimizeDifference(nums) {
+    return minimumAbsDifference(nums);
 }
 
 module.exports = minimizeDifference;
