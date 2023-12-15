@@ -5,7 +5,11 @@ module.exports = {
     // other paths where your React components are located
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'pink':'#db1068',
+      },
+    },
     fontFamily: {
       'lol' : ['Anton', 'sans-serif'],
       'rs' : ['Rubik Iso', 'cursive'],
@@ -20,6 +24,7 @@ module.exports = {
       'pp' : ['Poppins', 'sans-serif'],
       'te' : ['Teko', 'sans-serif'],
     },
+    
   },
   plugins: [],
 }

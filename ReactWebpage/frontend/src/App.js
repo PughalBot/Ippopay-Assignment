@@ -1,14 +1,17 @@
-// App.js
-
+// App.js or your main application file
 import React from 'react';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PasswordChecker from './PasswordChecker';
+import ThankYou from './ThankYou';
 
 function App() {
     return (
-        <div className="App">
-            <PasswordChecker />
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<PasswordChecker />} />
+                <Route path="/thank-you" element={<ThankYou />} />
+            </Routes>
+        </Router>
     );
 }
 

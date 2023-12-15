@@ -1,28 +1,34 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const redis = require('redis');
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost/passwordDB', { useNewUrlParser: true, useUnifiedTopology: true });
-
-const passwordSchema = new mongoose.Schema({
-    password: String,
-    strength: Number
-});
-const Password = mongoose.model('Password', passwordSchema);
-
-app.post('/savePassword', (req, res) => {
-    const newPassword = new Password({
-        password: req.body.password,
-        strength: req.body.strength
-    });
-    newPassword.save().then(() => res.json('Password saved!'));
+// Connect to a local Redis instance directly
+const redisClient = redis.createClient({
+    url: 'redis://localhost:6379' // Local Redis URI
 });
 
-const port = 5000;
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
+redisClient.connect();
+
+app.post('/savePassword', async (req, res) => {
+    const { password, strength } = req.body;
+
+    try {
+        console.log('Received request:', req.body); // Log the received data
+        await redisClient.set(password, strength);
+        console.log(`Password saved: ${password}`); // Log the saved password
+        res.json('Password saved!');
+    } catch (err) {
+        console.log('Error saving password:', err); // Log any errors
+        res.status(400).json('Error: ' + err.message);
+    }
+});
+
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
