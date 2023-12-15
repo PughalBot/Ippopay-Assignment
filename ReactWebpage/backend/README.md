@@ -1,3 +1,4 @@
+
 # Node.js Backend with Redis
 
 This is a simple Node.js backend application that uses Redis for data storage. It includes an endpoint for saving passwords with their respective strength values.
@@ -16,40 +17,47 @@ Follow these steps to get your development environment set up:
 1. **Clone the Repository**
 
    ```bash
-   git clone 
-   cd repo name
-Install Node.js Dependencies
+   git clone https://github.com/PughalBot/Ippopay-Assignment
+   cd Ippopay-Assignment
+   ```
 
-Inside the cloned directory, run:
+2. **Install Node.js Dependencies**
 
-bash
-Copy code
-npm install
-Start the Redis Server
+   Inside the cloned directory, run:
 
-Ensure your Redis server is up and running. If you have Redis installed locally, start it with the following command:
+   ```bash
+   npm install
+   ```
 
-bash
-Copy code
-redis-server
-The default Redis configuration should be sufficient for local development.
+3. **Start the Redis Server**
 
-Running the Application
+   Ensure your Redis server is up and running. If you have Redis installed locally, start it with the following command:
+
+   ```bash
+   redis-server
+   ```
+
+   The default Redis configuration should be sufficient for local development.
+
+## Running the Application
+
 To start the application, run the following command in your terminal:
 
-bash
-Copy code
-node server.js 
+```bash
+node server.js
+```
+
 The server should start, and you will see a message indicating it is running on a specific port (default is 5000).
 
-Usage
+## Usage
+
 The application has the following endpoint:
 
-POST /savePassword: This endpoint expects a JSON payload with password and strength fields. Example request:
+- **POST /savePassword**: This endpoint expects a JSON payload with `password` and `strength` fields. Example request:
 
-json
-Copy code
-{
-    "password": "yourPassword",
-    "strength": "strong"
-}
+  ```json
+  {
+      "password": "yourPassword",
+      "strength": "strong"
+  }
+  ```
